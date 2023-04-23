@@ -15,7 +15,8 @@ class CardManager extends StatefulWidget {
       todoCardName: "",
       todoCardTaskNum: "",
       iconID: 0,
-      color: Colors.greenAccent);
+      color: Colors.greenAccent,
+      listToDo: []);
 
   CardManager({super.key, required this.parentAction});
 

@@ -5,9 +5,10 @@ import 'package:todo/modules/module_center.dart';
 import 'package:todo/pages/todo_list.dart';
 
 class CardToDo extends StatefulWidget {
-  final ModelToDoCard oModelCard;
+  ModelToDoCard oModelCard;
+  final int indexOfObject;
   final List<ModelIcon> allIcons = ModuleCenter.listIcons;
-  CardToDo({super.key, required this.oModelCard});
+  CardToDo({super.key, required this.oModelCard, required this.indexOfObject});
 
   @override
   State<CardToDo> createState() => _CardToDoState();

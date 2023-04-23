@@ -65,6 +65,7 @@ class _ToDoListState extends State<ToDoList> {
                               oTextToDo: oText,
                             ));
                           });
+                          widget.oModuleCard.setListToDo(oText);
                         },
                       ),
                     ],

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/models/modelIcon.dart';
+import 'package:todo/models/modelToDoCard.dart';
+import 'package:todo/widgets/card_todo.dart';
 
 class ModuleCenter {
   static List<ModelIcon> listIcons = [
@@ -21,5 +23,18 @@ class ModuleCenter {
     ModelIcon(iconID: 16, icon: Icons.music_note),
     ModelIcon(iconID: 17, icon: Icons.sunny),
     // add more icons here if you want
+  ];
+  static List<CardToDo> listCards = [
+    CardToDo(
+      indexOfObject: 1,
+      oModelCard: ModelToDoCard(
+        todoCardID: 0,
+        todoCardName: "ToDo",
+        todoCardTaskNum: "2 Task",
+        iconID: 1,
+        color: Colors.orangeAccent,
+        listToDo: [],
+      ),
+    )
   ];
 }

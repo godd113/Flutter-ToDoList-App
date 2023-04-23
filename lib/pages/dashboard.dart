@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelToDoCard.dart';
+import 'package:todo/modules/module_center.dart';
 import 'package:todo/pages/card_manager.dart';
 
 import '../modules/module_colors.dart';
@@ -11,16 +12,6 @@ import '../widgets/card_todo.dart';
 class Dashboard extends StatefulWidget {
   Dashboard({super.key});
   final double addBtnSize = 30;
-  List<CardToDo> listCard = [
-    CardToDo(
-      oModelCard: ModelToDoCard(
-          todoCardID: 0,
-          todoCardName: "ToDo",
-          todoCardTaskNum: "2 Task",
-          iconID: 1,
-          color: Colors.orangeAccent),
-    )
-  ];
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -77,8 +68,11 @@ class _DashboardState extends State<Dashboard> {
                             builder: (context) => CardManager(
                                   parentAction: (ModelToDoCard oModelCard) {
                                     setState(() {
-                                      widget.listCard.add(
-                                          CardToDo(oModelCard: oModelCard));
+                                      ModuleCenter.listCards.add(CardToDo(
+                                          oModelCard: oModelCard,
+                                          indexOfObject:
+                                              ModuleCenter.listCards.length +
+                                                  1));
                                     });
                                   },
                                 )),
@@ -91,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
             ),
             Container(
               child: Column(
-                children: List<Widget>.from(widget.listCard),
+                children: List<Widget>.from(ModuleCenter.listCards),
               ),
             )
           ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/modules/module_center.dart';
 import 'package:todo/modules/module_colors.dart';
-
 import '../models/modelIcon.dart';
 
 class PickerIcon extends StatefulWidget {
@@ -18,7 +18,7 @@ class PickerIcon extends StatefulWidget {
 class _PickerIconState extends State<PickerIcon> {
   @override
   Widget build(BuildContext context) {
-    List<ModelIcon> allIcons = ModuleColors.listIcons;
+    List<ModelIcon> allIcons = ModuleCenter.listIcons;
     return Container(
       width: MediaQuery.of(context).size.width - 100,
       height: 300,

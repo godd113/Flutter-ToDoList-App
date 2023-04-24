@@ -26,7 +26,7 @@ class ModuleCenter {
   ];
   static List<CardToDo> listCards = [
     CardToDo(
-      indexOfObject: 1,
+      indexOfObject: 0,
       oModelCard: ModelToDoCard(
         todoCardID: 0,
         todoCardName: "ToDo",

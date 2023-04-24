@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/models/modelToDoCard.dart';
+import 'package:todo/modules/module_center.dart';
 import 'package:todo/modules/module_colors.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:todo/widgets/picker_icon.dart';
@@ -11,7 +12,7 @@ class CardManager extends StatefulWidget {
   final ValueChanged<ModelToDoCard> parentAction;
 
   ModelToDoCard? oCard = ModelToDoCard(
-      todoCardID: 1,
+      todoCardID: 0,
       todoCardName: "",
       todoCardTaskNum: "",
       iconID: 0,
@@ -28,6 +29,12 @@ class _CardManagerState extends State<CardManager> {
   // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => widget.pickerColor = color);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

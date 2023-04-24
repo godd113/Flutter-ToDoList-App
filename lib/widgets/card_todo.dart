@@ -64,7 +64,10 @@ class _CardToDoState extends State<CardToDo> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => ToDoList(oModuleCard: widget.oModelCard)),
+              builder: (context) => ToDoList(
+                  indexObject: widget.indexOfObject,
+                  oModuleCard:
+                      ModuleCenter.listCards[widget.indexOfObject].oModelCard)),
         );
       },
     );

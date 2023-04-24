@@ -3,20 +3,79 @@ import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
+import 'package:todo/widgets/listview.dart';
 import 'package:todo/widgets/tableview.dart';
 import 'package:todo/widgets/tableview_row.dart';
 
 class ToDoList extends StatefulWidget {
   ModelToDoCard oModuleCard;
+  int indexObject;
   final List<ModelIcon> allIcons = ModuleCenter.listIcons;
   List<TableViewRowManager> list = [];
-  ToDoList({super.key, required this.oModuleCard});
+  ToDoList({super.key, required this.oModuleCard, required this.indexObject});
 
   @override
   State<ToDoList> createState() => _ToDoListState();
 }
 
 class _ToDoListState extends State<ToDoList> {
+  TextEditingController? _textFieldController;
+  String todoNew = "";
+  Future<void> initDataDrawing() async {
+    for (var oTextToDo in widget.oModuleCard.listToDo) {
+      widget.list.add(TableViewRowManager(oTextToDo: oTextToDo));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initDataDrawing();
+  }
+
+  Future<void> _displayDialogAddNewTodo(BuildContext context) async {
+    _textFieldController = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('New Reminder'),
+            content: TextField(
+              onChanged: (value) {
+                setState(() {
+                  todoNew = value;
+                });
+              },
+              controller: _textFieldController,
+              decoration: InputDecoration(hintText: "Input your todolist"),
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                color: Colors.green,
+                textColor: Colors.white,
+                child: Text('OK'),
+                onPressed: () {
+                  ModelTextToDo oText = ModelTextToDo(
+                      textToDoID: widget.list.length + 1,
+                      textToDoName: todoNew,
+                      done: false);
+
+                  //widget.oModuleCard.setListToDo(oText);
+                  ModuleCenter.listCards[widget.indexObject].oModelCard.listToDo
+                      .add(oText);
+                  setState(() {
+                    widget.list.add(TableViewRowManager(
+                      oTextToDo: oText,
+                    ));
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     ModelIcon imgIcon = widget.allIcons
@@ -56,25 +115,17 @@ class _ToDoListState extends State<ToDoList> {
                       GestureDetector(
                         child: Icon(Icons.add),
                         onTap: () {
-                          ModelTextToDo oText = ModelTextToDo(
-                              textToDoID: widget.list.length + 1,
-                              textToDoName: "Testttt",
-                              done: false);
-                          setState(() {
-                            widget.list.add(TableViewRowManager(
-                              oTextToDo: oText,
-                            ));
-                          });
-                          widget.oModuleCard.setListToDo(oText);
+                          _displayDialogAddNewTodo(context);
                         },
                       ),
                     ],
                   ),
                 ],
               )),
-          TableViewManager(
+          ListViewManager()
+          /*TableViewManager(
             list: widget.list,
-          )
+          )*/
         ],
       )),
     );

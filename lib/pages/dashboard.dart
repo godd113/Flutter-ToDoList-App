@@ -71,8 +71,7 @@ class _DashboardState extends State<Dashboard> {
                                       ModuleCenter.listCards.add(CardToDo(
                                           oModelCard: oModelCard,
                                           indexOfObject:
-                                              ModuleCenter.listCards.length +
-                                                  1));
+                                              ModuleCenter.listCards.length));
                                     });
                                   },
                                 )),

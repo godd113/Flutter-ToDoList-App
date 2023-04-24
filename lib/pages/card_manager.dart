@@ -14,7 +14,7 @@ class CardManager extends StatefulWidget {
   ModelToDoCard? oCard = ModelToDoCard(
       todoCardID: 0,
       todoCardName: "",
-      todoCardTaskNum: "",
+      todoCardTaskNum: "0",
       iconID: 0,
       color: Colors.transparent,
       listToDo: []);

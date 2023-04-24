@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:todo/databases/todo_list_db.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
@@ -18,6 +19,18 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  late ToDoListDatabase _db;
+  late Future<List<ModelToDoCard>> listToDoCard;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _db = ToDoListDatabase.instance;
+    listToDoCard = _db.readAll();
+    //_db.create(ModuleCenter.listCards[0].oModelCard);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenDeviceSize = MediaQuery.of(context).size.width;

@@ -11,8 +11,13 @@ class ToDoList extends StatefulWidget {
   ModelToDoCard oModuleCard;
   int indexObject;
   final List<ModelIcon> allIcons = ModuleCenter.listIcons;
+  final ValueChanged<String> parentAction;
   List<TableViewRowManager> list = [];
-  ToDoList({super.key, required this.oModuleCard, required this.indexObject});
+  ToDoList(
+      {super.key,
+      required this.oModuleCard,
+      required this.indexObject,
+      required this.parentAction});
 
   @override
   State<ToDoList> createState() => _ToDoListState();
@@ -55,6 +60,9 @@ class _ToDoListState extends State<ToDoList> {
                 textColor: Colors.white,
                 child: Text('OK'),
                 onPressed: () {
+                  if (todoNew.trim() == "") {
+                    return;
+                  }
                   ModelTextToDo oText = ModelTextToDo(
                       textToDoID: widget.list.length + 1,
                       textToDoName: todoNew,
@@ -69,6 +77,9 @@ class _ToDoListState extends State<ToDoList> {
                     ));
                     Navigator.pop(context);
                   });
+                  widget.parentAction(ModuleCenter
+                      .listCards[widget.indexObject].oModelCard.listToDo.length
+                      .toString());
                 },
               ),
             ],
@@ -122,7 +133,9 @@ class _ToDoListState extends State<ToDoList> {
                   ),
                 ],
               )),
-          ListViewManager()
+          ListViewManager(
+            indexObject: widget.indexObject,
+          )
           /*TableViewManager(
             list: widget.list,
           )*/

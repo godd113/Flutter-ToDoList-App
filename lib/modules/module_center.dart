@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/customs/icons/app_icons.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/widgets/card_todo.dart';
@@ -22,6 +23,15 @@ class ModuleCenter {
     ModelIcon(iconID: 15, icon: Icons.snowing),
     ModelIcon(iconID: 16, icon: Icons.music_note),
     ModelIcon(iconID: 17, icon: Icons.sunny),
+    ModelIcon(iconID: 18, icon: AppIcons.icons8_beach_60),
+    ModelIcon(iconID: 22, icon: AppIcons.icons8_around_the_globe_60),
+    ModelIcon(iconID: 19, icon: AppIcons.directions_bike),
+    ModelIcon(iconID: 20, icon: AppIcons.directions_boat),
+    ModelIcon(iconID: 21, icon: AppIcons.ac_unit),
+    ModelIcon(iconID: 22, icon: AppIcons.pets),
+    ModelIcon(iconID: 23, icon: AppIcons.event_seat),
+    ModelIcon(iconID: 24, icon: AppIcons.extension),
+    ModelIcon(iconID: 25, icon: AppIcons.free_breakfast),
     // add more icons here if you want
   ];
   static List<CardToDo> listCards = [
@@ -30,11 +40,26 @@ class ModuleCenter {
       oModelCard: ModelToDoCard(
         todoCardID: 0,
         todoCardName: "ToDo",
-        todoCardTaskNum: "2 Task",
+        todoCardTaskNum: "0",
         iconID: 1,
         color: Colors.orangeAccent,
         listToDo: [],
       ),
     )
   ];
+
+  static Color darken(Color color, [double amount = .3]) {
+    assert(amount >= 0 && amount <= 1);
+
+    final hsl = HSLColor.fromColor(color);
+    var hslDark;
+    if (color.red < 50 && color.green < 50 && color.blue < 50) {
+      //-- white
+      hslDark = hsl.withLightness((hsl.lightness + 1.0).clamp(0.0, 1.0));
+    } else {
+      hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
+    }
+
+    return hslDark.toColor();
+  }
 }

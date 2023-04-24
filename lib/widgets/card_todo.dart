@@ -31,14 +31,19 @@ class _CardToDoState extends State<CardToDo> {
         child: Column(children: [
           Row(
             children: [
-              Icon(imgIcon.icon),
+              Icon(
+                imgIcon.icon,
+                color: ModuleCenter.darken(widget.oModelCard.color),
+              ),
               Container(
                 padding: EdgeInsets.only(left: 5),
                 width: (screenDeviceWidth - 105),
                 child: Text(
                   widget.oModelCard.todoCardName,
                   style: TextStyle(
-                      color: Colors.black, fontSize: 25, fontFamily: 'Kanit'),
+                      color: ModuleCenter.darken(widget.oModelCard.color),
+                      fontSize: 25,
+                      fontFamily: 'Kanit'),
                 ),
               ),
               Container(
@@ -52,9 +57,11 @@ class _CardToDoState extends State<CardToDo> {
                 width: 30,
               ),
               Text(
-                '2 Task',
+                '${widget.oModelCard.todoCardTaskNum} Tasks',
                 style: TextStyle(
-                    color: Colors.blueGrey, fontSize: 15, fontFamily: 'Kanit'),
+                    color: ModuleCenter.darken(widget.oModelCard.color),
+                    fontSize: 15,
+                    fontFamily: 'Kanit'),
               )
             ],
           )
@@ -66,6 +73,11 @@ class _CardToDoState extends State<CardToDo> {
           MaterialPageRoute(
               builder: (context) => ToDoList(
                   indexObject: widget.indexOfObject,
+                  parentAction: (value) {
+                    setState(() {
+                      widget.oModelCard.todoCardTaskNum = value;
+                    });
+                  },
                   oModuleCard:
                       ModuleCenter.listCards[widget.indexOfObject].oModelCard)),
         );

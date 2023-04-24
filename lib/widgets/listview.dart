@@ -5,14 +5,21 @@ import 'package:todo/widgets/tableview_row.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ListViewManager extends StatefulWidget {
-  const ListViewManager({super.key});
+  int indexObject;
+  ListViewManager({super.key, required this.indexObject});
 
   @override
   State<ListViewManager> createState() => _ListViewManagerState();
 }
 
 class _ListViewManagerState extends State<ListViewManager> {
-  CardToDo oCard = ModuleCenter.listCards[0];
+  CardToDo? oCard;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    oCard = ModuleCenter.listCards[widget.indexObject];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +27,11 @@ class _ListViewManagerState extends State<ListViewManager> {
       child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: oCard.oModelCard.listToDo.length,
+          itemCount: oCard!.oModelCard.listToDo.length,
           itemBuilder: (context, index) {
             return Dismissible(
               direction: DismissDirection.endToStart,
-              key: Key(oCard.oModelCard.listToDo[index].textToDoID.toString()),
+              key: Key(oCard!.oModelCard.listToDo[index].textToDoID.toString()),
               child: Slidable(
                 // Specify a key if the Slidable is dismissible.
                 key: const ValueKey(0),
@@ -36,7 +43,7 @@ class _ListViewManagerState extends State<ListViewManager> {
                     SlidableAction(
                       onPressed: (context) {
                         setState(() {
-                          oCard.oModelCard.listToDo.removeAt(index);
+                          oCard!.oModelCard.listToDo.removeAt(index);
                         });
                         print("delete object");
                       },
@@ -50,7 +57,7 @@ class _ListViewManagerState extends State<ListViewManager> {
                 // The child of the Slidable is what the user sees when the
                 // component is not dragged.
                 child: TableViewRowManager(
-                  oTextToDo: oCard.oModelCard.listToDo[index],
+                  oTextToDo: oCard!.oModelCard.listToDo[index],
                 ),
               ),
             );

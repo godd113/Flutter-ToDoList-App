@@ -16,7 +16,7 @@ class CardManager extends StatefulWidget {
       todoCardName: "",
       todoCardTaskNum: "",
       iconID: 0,
-      color: Colors.greenAccent,
+      color: Colors.transparent,
       listToDo: []);
 
   CardManager({super.key, required this.parentAction});
@@ -46,6 +46,12 @@ class _CardManagerState extends State<CardManager> {
           actions: [
             TextButton(
               onPressed: () {
+                if (widget.oCard!.todoCardName.trim() == "" ||
+                    widget.oCard!.iconID == 0 ||
+                    widget.oCard!.color == Colors.transparent) {
+                  _asyncWarningDialog(context);
+                  return;
+                }
                 // Do something when the user taps the "Done" button
                 var widget2 = widget.oCard;
                 widget.parentAction(widget2!);
@@ -184,5 +190,27 @@ class _CardManagerState extends State<CardManager> {
             ),
           ],
         )));
+  }
+
+  Future<void> _asyncWarningDialog(BuildContext context) async {
+    return showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Warning!'),
+          content:
+              const Text('Please complate your category info before add new.'),
+          actions: <Widget>[
+            MaterialButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 }

@@ -20,15 +20,33 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   late ToDoListDatabase _db;
-  late Future<List<ModelToDoCard>> listToDoCard;
+  late List<ModelToDoCard> listToDoCard;
 
   @override
   void initState() {
     // TODO: implement initState
     _db = ToDoListDatabase.instance;
-    listToDoCard = _db.readAll();
+    getDBToDoList();
     //_db.create(ModuleCenter.listCards[0].oModelCard);
     super.initState();
+  }
+
+  Future<void> getDBToDoList() async {
+    listToDoCard = await _db.selectDataFromTable();
+    int i = 0;
+    for (var element in listToDoCard) {
+      ModuleCenter.listCards.add(CardToDo(
+        oModelCard: element,
+        indexOfObject: i,
+      ));
+      i += 1;
+    }
+    print("xxx");
+  }
+
+  Future<String> click() async {
+    print('click setting');
+    return 'click';
   }
 
   @override
@@ -42,7 +60,8 @@ class _DashboardState extends State<Dashboard> {
         leading: GestureDetector(
           child: const Icon(Icons.settings),
           onTap: () {
-            print('click setting');
+            Future<String> x = click();
+            print(x);
           },
         ),
       ),

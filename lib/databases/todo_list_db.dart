@@ -119,4 +119,18 @@ CREATE TABLE $tableToDoList (
       tableToDoList,
     );
   }
+
+  Future<List<ModelToDoCard>> selectDataFromTable() async {
+    final db = await instance.database;
+    final orderBy = '${ToDoListFields.todoCardID} DESC';
+    List<Map<String, dynamic>> result =
+        await db.query(tableToDoList, orderBy: orderBy);
+
+    // ข้อมูลในฐานข้อมูลปกติเป็น json string data เวลาสั่งค่ากลับต้องทำการ
+    // แปลงข้อมูล จาก json ไปเป็น object กรณีแสดงหลายรายการก็ทำเป็น List
+    List<ModelToDoCard> _objects =
+        result.map((json) => ModelToDoCard.fromJson(json)).toList();
+
+    return _objects;
+  }
 }

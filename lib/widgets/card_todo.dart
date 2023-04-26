@@ -6,9 +6,8 @@ import 'package:todo/pages/todo_list.dart';
 
 class CardToDo extends StatefulWidget {
   ModelToDoCard oModelCard;
-  final int indexOfObject;
   final List<ModelIcon> allIcons = ModuleCenter.listIcons;
-  CardToDo({super.key, required this.oModelCard, required this.indexOfObject});
+  CardToDo({super.key, required this.oModelCard});
 
   @override
   State<CardToDo> createState() => _CardToDoState();
@@ -18,6 +17,8 @@ class _CardToDoState extends State<CardToDo> {
   @override
   Widget build(BuildContext context) {
     final double screenDeviceWidth = MediaQuery.of(context).size.width;
+    int index = ModuleCenter.listCards.indexWhere((element) =>
+        element.oModelCard.todoCardID == widget.oModelCard.todoCardID);
     ModelIcon imgIcon = widget.allIcons
         .firstWhere((icon) => icon.iconID == widget.oModelCard.iconID);
     return GestureDetector(
@@ -72,14 +73,13 @@ class _CardToDoState extends State<CardToDo> {
           context,
           MaterialPageRoute(
               builder: (context) => ToDoList(
-                  indexObject: widget.indexOfObject,
+                  indexObject: index,
                   parentAction: (value) {
                     setState(() {
                       widget.oModelCard.todoCardTaskNum = value;
                     });
                   },
-                  oModuleCard:
-                      ModuleCenter.listCards[widget.indexOfObject].oModelCard)),
+                  oModuleCard: ModuleCenter.listCards[index].oModelCard)),
         );
       },
     );

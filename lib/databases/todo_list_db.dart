@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 
 class ToDoListDatabase {
@@ -42,8 +43,24 @@ CREATE TABLE $tableToDoList (
   ${ToDoListFields.todoCardName} $integerType,
   ${ToDoListFields.todoCardTaskNum} $textType,
   ${ToDoListFields.iconID} $integerType,
-  ${ToDoListFields.color} $integerType,
-  ${ToDoListFields.listToDo} $textType
+  ${ToDoListFields.color} $integerType
+)
+''');
+  }
+
+  Future _createDB_todoText(Database db, int version) async {
+    // รูปแบบข้อมูล sqlite ที่รองรับ
+    final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
+    final textType = 'TEXT NOT NULL';
+    final boolType = 'BOOLEAN NOT NULL';
+    final integerType = 'INTEGER NOT NULL';
+
+    // ทำคำสั่งสร้างตาราง
+    await db.execute('''
+CREATE TABLE $tableToDoText (
+  ${ToDoTextFields.textToDoID} $idType,
+  ${ToDoTextFields.textToDoName} $textType,
+  ${ToDoTextFields.done} $boolType,
 )
 ''');
   }

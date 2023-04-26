@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:ui';
-
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/pages/todo_list.dart';
 
 final String tableToDoList = 'todolist';
 
 class ModelToDoCard {
-  final int todoCardID;
+  int todoCardID;
   String todoCardName;
   String todoCardTaskNum;
   int iconID;
@@ -55,8 +54,7 @@ class ModelToDoCard {
         ToDoListFields.todoCardName: todoCardName,
         ToDoListFields.todoCardTaskNum: todoCardTaskNum,
         ToDoListFields.iconID: iconID,
-        ToDoListFields.color: color.value,
-        ToDoListFields.listToDo: listToDo,
+        ToDoListFields.color: color.value
       };
 }
 
@@ -68,8 +66,7 @@ class ToDoListFields {
     todoCardName,
     todoCardTaskNum,
     iconID,
-    color,
-    listToDo
+    color
   ];
 
   // กำหนดแต่ละฟิลด์ของตาราง ต้องเป็น String ทั้งหมด
@@ -79,5 +76,4 @@ class ToDoListFields {
   static const String todoCardTaskNum = 'todoCardTaskNum';
   static const String iconID = 'iconID';
   static const String color = 'color';
-  static const String listToDo = 'listToDo';
 }

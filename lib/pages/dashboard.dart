@@ -32,21 +32,31 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> getDBToDoList() async {
+    ModuleCenter.listCards = [];
     listToDoCard = await _db.selectDataFromTable();
     int i = 0;
-    for (var element in listToDoCard) {
-      ModuleCenter.listCards.add(CardToDo(
-        oModelCard: element,
-        indexOfObject: i,
-      ));
-      i += 1;
-    }
+    setState(() {
+      for (var element in listToDoCard) {
+        ModuleCenter.listCards.add(CardToDo(oModelCard: element));
+        i += 1;
+      }
+      ModuleCenter.listCards.sort(
+          (a, b) => b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
+    });
+
     print("xxx");
   }
 
   Future<String> click() async {
     print('click setting');
     return 'click';
+  }
+
+  Future<void> addNewList(ModelToDoCard oModelCard) async {
+    ModuleCenter.listCards.add(CardToDo(oModelCard: oModelCard));
+    ModuleCenter.listCards.sort(
+        (a, b) => b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
+    _db.create(oModelCard);
   }
 
   @override
@@ -100,10 +110,7 @@ class _DashboardState extends State<Dashboard> {
                             builder: (context) => CardManager(
                                   parentAction: (ModelToDoCard oModelCard) {
                                     setState(() {
-                                      ModuleCenter.listCards.add(CardToDo(
-                                          oModelCard: oModelCard,
-                                          indexOfObject:
-                                              ModuleCenter.listCards.length));
+                                      addNewList(oModelCard);
                                     });
                                   },
                                 )),

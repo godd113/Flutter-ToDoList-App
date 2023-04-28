@@ -65,72 +65,74 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     final double screenDeviceSize = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('To Do'),
-        backgroundColor: ModuleColors.themeColor,
-        automaticallyImplyLeading: false, // This will remove the back button
-        leading: GestureDetector(
-          child: const Icon(Icons.settings),
-          onTap: () {
-            Future<String> x = click();
-            print(x);
-          },
+        appBar: AppBar(
+          title: const Text('To Do'),
+          backgroundColor: ModuleColors.themeColor,
+          automaticallyImplyLeading: false, // This will remove the back button
+          leading: GestureDetector(
+            child: const Icon(Icons.settings),
+            onTap: () {
+              Future<String> x = click();
+              print(x);
+            },
+          ),
         ),
-      ),
-      body: Container(
-        padding: const EdgeInsets.only(left: 15, top: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            padding: const EdgeInsets.only(left: 15, top: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    width: screenDeviceSize / 2,
-                    child: Text(
-                      'My List',
-                      style: TextStyle(
-                          color: ModuleColors.themeColor,
-                          fontSize: 20,
-                          fontFamily: 'Kanit'),
-                    )),
-                Container(
-                  alignment: Alignment.centerRight,
-                  width: (screenDeviceSize / 2) - widget.addBtnSize,
-                  child: GestureDetector(
-                    child: Icon(
-                      Icons.add,
-                      size: widget.addBtnSize,
-                    ),
-                    onTap: () {
-                      /*setState(() {
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                        width: screenDeviceSize / 2,
+                        child: Text(
+                          'My List',
+                          style: TextStyle(
+                              color: ModuleColors.themeColor,
+                              fontSize: 20,
+                              fontFamily: 'Kanit'),
+                        )),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      width: (screenDeviceSize / 2) - widget.addBtnSize,
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.add,
+                          size: widget.addBtnSize,
+                        ),
+                        onTap: () {
+                          /*setState(() {
                         widget.listCard.add(CardToDo());
                       });*/
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CardManager(
-                                  parentAction: (ModelToDoCard oModelCard) {
-                                    setState(() {
-                                      addNewList(oModelCard);
-                                    });
-                                  },
-                                )),
-                      );
-                      print('click add');
-                    },
-                  ),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CardManager(
+                                      parentAction: (ModelToDoCard oModelCard) {
+                                        setState(() {
+                                          addNewList(oModelCard);
+                                        });
+                                      },
+                                    )),
+                          );
+                          print('click add');
+                        },
+                      ),
+                    ),
+                  ],
                 ),
+                Container(
+                  child: Column(
+                    children: List<Widget>.from(ModuleCenter.listCards),
+                  ),
+                )
               ],
             ),
-            Container(
-              child: Column(
-                children: List<Widget>.from(ModuleCenter.listCards),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

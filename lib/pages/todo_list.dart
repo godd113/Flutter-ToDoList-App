@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:todo/databases/todo_list_db.dart';
 import 'package:todo/databases/todo_text_db.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/widgets/listview.dart';
-import 'package:todo/widgets/tableview.dart';
 import 'package:todo/widgets/tableview_row.dart';
+import 'package:intl/intl.dart';
 
 class ToDoList extends StatefulWidget {
   ModelToDoCard oModuleCard;
@@ -31,7 +30,10 @@ class _ToDoListState extends State<ToDoList> {
   String todoNew = "";
   Future<void> initDataDrawing() async {
     for (var oTextToDo in widget.oModuleCard.listToDo) {
-      widget.list.add(TableViewRowManager(oTextToDo: oTextToDo));
+      widget.list.add(TableViewRowManager(
+        oTextToDo: oTextToDo,
+        tintColor: widget.oModuleCard.color,
+      ));
     }
   }
 
@@ -73,8 +75,10 @@ class _ToDoListState extends State<ToDoList> {
                   if (todoNew.trim() == "") {
                     return;
                   }
+                  String _id =
+                      DateFormat('yyyyMMddHHmmss').format(DateTime.now());
                   ModelTextToDo oText = ModelTextToDo(
-                      textToDoID: widget.list.length + 1,
+                      textToDoID: int.parse(_id),
                       todoCardID: widget.oModuleCard.todoCardID,
                       textToDoName: todoNew,
                       done: false);
@@ -82,6 +86,7 @@ class _ToDoListState extends State<ToDoList> {
                   setState(() {
                     widget.list.add(TableViewRowManager(
                       oTextToDo: oText,
+                      tintColor: widget.oModuleCard.color,
                     ));
                     Navigator.pop(context);
                   });

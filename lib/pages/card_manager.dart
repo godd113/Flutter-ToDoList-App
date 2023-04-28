@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:todo/models/modelToDoCard.dart';
-import 'package:todo/modules/module_center.dart';
 import 'package:todo/modules/module_colors.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:todo/widgets/color_picker.dart';
 import 'package:todo/widgets/picker_icon.dart';
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 
 class CardManager extends StatefulWidget {
   // create some values
-  Color pickerColor = Color(0xff443a49);
-  Color currentColor = Color(0xff443a49);
+  Color pickerColor = const Color(0xff443a49);
+  Color currentColor = const Color(0xff443a49);
   final ValueChanged<ModelToDoCard> parentAction;
 
   ModelToDoCard? oCard = ModelToDoCard(
@@ -42,7 +44,7 @@ class _CardManagerState extends State<CardManager> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Add New'),
+          title: const Text('Add New'),
           backgroundColor: ModuleColors.themeColor,
           actions: [
             TextButton(
@@ -101,11 +103,12 @@ class _CardManagerState extends State<CardManager> {
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: Colors.white,
                                 border: Border.all(
-                                    color: Color.fromARGB(255, 216, 216, 216),
+                                    color: const Color.fromARGB(
+                                        255, 216, 216, 216),
                                     style: BorderStyle.solid)),
                             width: MediaQuery.of(context).size.width - 40,
                             child: TextField(
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Enter your category name',
                               ),
@@ -134,24 +137,32 @@ class _CardManagerState extends State<CardManager> {
                     margin: const EdgeInsets.only(left: 20, top: 10),
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
                         border: Border.all(
-                            color: Color.fromARGB(255, 216, 216, 216),
+                            color: const Color.fromARGB(255, 216, 216, 216),
                             style: BorderStyle.solid)),
                     width: MediaQuery.of(context).size.width - 40,
-                    height: 300,
+                    height: 200,
                     child: Center(
                         child: Container(
-                      transformAlignment: Alignment.topCenter,
-                      width: 200,
-                      child: BlockPicker(
+                            transformAlignment: Alignment.topCenter,
+                            width: MediaQuery.of(context).size.width - 40,
+                            child: TColorPicker(
+                                parentActions: (value) {
+                                  widget.oCard!.color = Color.fromRGBO(
+                                      value.r, value.g, value.b, value.alpha);
+                                },
+                                selectionColor: '')
+                            /*BlockPicker(
                         pickerColor: widget.pickerColor, //default color
                         onColorChanged: (Color color) {
                           //on color picked
                           widget.pickerColor = color;
                           widget.oCard?.color = color;
                         },
-                      ),
-                    ))),
+                      ),*/
+                            ))),
               ],
             ),
             Row(

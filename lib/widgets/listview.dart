@@ -57,8 +57,8 @@ class _ListViewManagerState extends State<ListViewManager> {
                 // The child of the Slidable is what the user sees when the
                 // component is not dragged.
                 child: TableViewRowManager(
-                  oTextToDo: oCard!.oModelCard.listToDo[index],
-                ),
+                    oTextToDo: oCard!.oModelCard.listToDo[index],
+                    tintColor: oCard!.oModelCard.color),
               ),
             );
           }),

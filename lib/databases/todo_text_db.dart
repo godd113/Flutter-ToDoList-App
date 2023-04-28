@@ -41,7 +41,8 @@ CREATE TABLE $tableToDoText (
   ${ToDoTextFields.textToDoID} $idType,
   ${ToDoTextFields.todoCardID} $intType,
   ${ToDoTextFields.textToDoName} $textType,
-  ${ToDoTextFields.done} $boolType
+  ${ToDoTextFields.done} $boolType,
+  FOREIGN KEY (${ToDoTextFields.todoCardID}) REFERENCES todolist (_id)
 )
 ''');
   }

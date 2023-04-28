@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:todo/databases/todo_list_db.dart';
 import 'package:todo/models/modelIcon.dart';
+import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/pages/card_manager.dart';
@@ -33,6 +34,7 @@ class _DashboardState extends State<Dashboard> {
 
   Future<void> getDBToDoList() async {
     ModuleCenter.listCards = [];
+    List<ModelTextToDo> listItem = [];
     listToDoCard = await _db.selectDataFromTable();
     int i = 0;
     setState(() {

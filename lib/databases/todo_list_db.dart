@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:todo/databases/todo_text_db.dart';
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 
@@ -139,6 +140,7 @@ CREATE TABLE $tableToDoText (
 
   Future<List<ModelToDoCard>> selectDataFromTable() async {
     final db = await instance.database;
+    final _db_text = ToDoTextDatabase.instance;
     final orderBy = '${ToDoListFields.todoCardID} DESC';
     List<Map<String, dynamic>> result =
         await db.query(tableToDoList, orderBy: orderBy);
@@ -147,6 +149,16 @@ CREATE TABLE $tableToDoText (
     // แปลงข้อมูล จาก json ไปเป็น object กรณีแสดงหลายรายการก็ทำเป็น List
     List<ModelToDoCard> _objects =
         result.map((json) => ModelToDoCard.fromJson(json)).toList();
+
+    for (var element in _objects) {
+      ModelToDoCard oCard = element;
+      List<ModelTextToDo> listItem =
+          await _db_text.selectDataFromTableToDoText(oCard.todoCardID);
+      if (listItem != null) {
+        element.listToDo = listItem;
+        element.todoCardTaskNum = listItem.length.toString();
+      }
+    }
 
     return _objects;
   }

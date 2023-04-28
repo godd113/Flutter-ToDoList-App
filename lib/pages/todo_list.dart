@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/databases/todo_list_db.dart';
+import 'package:todo/databases/todo_text_db.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
@@ -24,6 +26,7 @@ class ToDoList extends StatefulWidget {
 }
 
 class _ToDoListState extends State<ToDoList> {
+  late ToDoTextDatabase _db;
   TextEditingController? _textFieldController;
   String todoNew = "";
   Future<void> initDataDrawing() async {
@@ -35,7 +38,14 @@ class _ToDoListState extends State<ToDoList> {
   @override
   void initState() {
     super.initState();
+    _db = ToDoTextDatabase.instance;
     initDataDrawing();
+  }
+
+  Future<void> addNewTextList(ModelTextToDo oModelText) async {
+    ModuleCenter.listCards[widget.indexObject].oModelCard.listToDo
+        .add(oModelText);
+    _db.createToDoText(oModelText);
   }
 
   Future<void> _displayDialogAddNewTodo(BuildContext context) async {
@@ -65,12 +75,10 @@ class _ToDoListState extends State<ToDoList> {
                   }
                   ModelTextToDo oText = ModelTextToDo(
                       textToDoID: widget.list.length + 1,
+                      todoCardID: widget.oModuleCard.todoCardID,
                       textToDoName: todoNew,
                       done: false);
-
-                  //widget.oModuleCard.setListToDo(oText);
-                  ModuleCenter.listCards[widget.indexObject].oModelCard.listToDo
-                      .add(oText);
+                  addNewTextList(oText);
                   setState(() {
                     widget.list.add(TableViewRowManager(
                       oTextToDo: oText,

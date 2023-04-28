@@ -35,7 +35,7 @@ class ModuleCenter {
     // add more icons here if you want
   ];
   static List<CardToDo> listCards = [
-    CardToDo(
+    /*CardToDo(
       indexOfObject: 0,
       oModelCard: ModelToDoCard(
         todoCardID: 0,
@@ -45,7 +45,7 @@ class ModuleCenter {
         color: Colors.orangeAccent,
         listToDo: [],
       ),
-    )
+    )*/
   ];
 
   static Color darken(Color color, [double amount = .3]) {

@@ -49,6 +49,7 @@ dev_dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_slidable: ^3.0.0
   sqflite: ^2.2.7
+  intl: ^0.18.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

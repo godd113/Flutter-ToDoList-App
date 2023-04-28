@@ -1,7 +1,9 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:todo/databases/todo_list_db.dart';
 import 'package:todo/models/modelIcon.dart';
+import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/pages/card_manager.dart';
@@ -18,6 +20,47 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  late ToDoListDatabase _db;
+  late List<ModelToDoCard> listToDoCard;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _db = ToDoListDatabase.instance;
+    getDBToDoList();
+    //_db.create(ModuleCenter.listCards[0].oModelCard);
+    super.initState();
+  }
+
+  Future<void> getDBToDoList() async {
+    ModuleCenter.listCards = [];
+    List<ModelTextToDo> listItem = [];
+    listToDoCard = await _db.selectDataFromTable();
+    int i = 0;
+    setState(() {
+      for (var element in listToDoCard) {
+        ModuleCenter.listCards.add(CardToDo(oModelCard: element));
+        i += 1;
+      }
+      ModuleCenter.listCards.sort(
+          (a, b) => b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
+    });
+
+    print("xxx");
+  }
+
+  Future<String> click() async {
+    print('click setting');
+    return 'click';
+  }
+
+  Future<void> addNewList(ModelToDoCard oModelCard) async {
+    ModuleCenter.listCards.add(CardToDo(oModelCard: oModelCard));
+    ModuleCenter.listCards.sort(
+        (a, b) => b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
+    _db.create(oModelCard);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenDeviceSize = MediaQuery.of(context).size.width;
@@ -29,7 +72,8 @@ class _DashboardState extends State<Dashboard> {
         leading: GestureDetector(
           child: const Icon(Icons.settings),
           onTap: () {
-            print('click setting');
+            Future<String> x = click();
+            print(x);
           },
         ),
       ),
@@ -68,10 +112,7 @@ class _DashboardState extends State<Dashboard> {
                             builder: (context) => CardManager(
                                   parentAction: (ModelToDoCard oModelCard) {
                                     setState(() {
-                                      ModuleCenter.listCards.add(CardToDo(
-                                          oModelCard: oModelCard,
-                                          indexOfObject:
-                                              ModuleCenter.listCards.length));
+                                      addNewList(oModelCard);
                                     });
                                   },
                                 )),

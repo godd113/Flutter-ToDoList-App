@@ -4,6 +4,7 @@ import 'package:todo/modules/module_center.dart';
 import 'package:todo/modules/module_colors.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:todo/widgets/picker_icon.dart';
+import 'package:intl/intl.dart';
 
 class CardManager extends StatefulWidget {
   // create some values
@@ -14,7 +15,7 @@ class CardManager extends StatefulWidget {
   ModelToDoCard? oCard = ModelToDoCard(
       todoCardID: 0,
       todoCardName: "",
-      todoCardTaskNum: "",
+      todoCardTaskNum: "0",
       iconID: 0,
       color: Colors.transparent,
       listToDo: []);
@@ -54,6 +55,9 @@ class _CardManagerState extends State<CardManager> {
                 }
                 // Do something when the user taps the "Done" button
                 var widget2 = widget.oCard;
+                String idCard =
+                    DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+                widget2!.todoCardID = int.parse(idCard);
                 widget.parentAction(widget2!);
                 Navigator.of(context).pop();
                 print('Doneeee!');

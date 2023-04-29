@@ -32,6 +32,7 @@ class _ToDoListState extends State<ToDoList> {
       widget.list.add(TableViewRowManager(
         oTextToDo: oTextToDo,
         tintColor: widget.oModuleCard.color,
+        parentActionEdit: _requestEditWhenClick,
       ));
     }
   }
@@ -49,49 +50,72 @@ class _ToDoListState extends State<ToDoList> {
     _db.createToDoText(oModelText);
   }
 
-  Future<void> _displayDialogAddNewTodo(BuildContext context) async {
-    _textFieldController = TextEditingController();
+  Future<void> _requestEditWhenClick(ModelTextToDo oToDo) async {
+    _displayDialogAddNewTodo(context, oToDo);
+  }
+
+  Future<void> _displayDialogAddNewTodo(BuildContext context,
+      [ModelTextToDo? oToDo]) async {
+    bool isEdit = false;
+    if (oToDo != null) {
+      isEdit = true;
+    }
+    _textFieldController = TextEditingController(
+        text: !isEdit ? "" : oToDo!.textToDoName.toString());
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('New Reminder'),
+            title: Text(!isEdit ? 'New Reminder' : 'Edit Reminder'),
             content: TextField(
               onChanged: (value) {
                 setState(() {
                   todoNew = value;
                 });
               },
+              autofocus: true,
               controller: _textFieldController,
               decoration:
                   const InputDecoration(hintText: "Input your todolist"),
             ),
             actions: <Widget>[
               MaterialButton(
-                color: Colors.green,
-                textColor: Colors.white,
-                child: Text('OK'),
+                color: widget.oModuleCard.color,
+                textColor: Colors.black,
+                child: const Text('OK'),
                 onPressed: () {
                   if (todoNew.trim() == "") {
                     return;
                   }
-                  String _id = ModuleCenter.genIDByDatetimeNow();
-                  ModelTextToDo oText = ModelTextToDo(
-                      textToDoID: int.parse(_id),
-                      todoCardID: widget.oModuleCard.todoCardID,
-                      textToDoName: todoNew,
-                      done: false);
-                  addNewTextList(oText);
-                  setState(() {
-                    widget.list.add(TableViewRowManager(
-                      oTextToDo: oText,
-                      tintColor: widget.oModuleCard.color,
-                    ));
+                  if (isEdit) {
+                    setState(() {
+                      oToDo!.textToDoName = todoNew;
+                    });
                     Navigator.pop(context);
-                  });
-                  widget.parentAction(ModuleCenter
-                      .listCards[widget.indexObject].oModelCard.listToDo.length
-                      .toString());
+                    _db.update(oToDo!);
+                  } else {
+                    String _id = ModuleCenter.genIDByDatetimeNow();
+                    ModelTextToDo oText = ModelTextToDo(
+                        textToDoID: int.parse(_id),
+                        todoCardID: widget.oModuleCard.todoCardID,
+                        textToDoName: todoNew,
+                        done: false);
+                    addNewTextList(oText);
+                    setState(() {
+                      widget.list.add(TableViewRowManager(
+                        oTextToDo: oText,
+                        tintColor: widget.oModuleCard.color,
+                        parentActionEdit: _requestEditWhenClick,
+                      ));
+                      Navigator.pop(context);
+                    });
+                    widget.parentAction(ModuleCenter
+                        .listCards[widget.indexObject]
+                        .oModelCard
+                        .listToDo
+                        .length
+                        .toString());
+                  }
                 },
               ),
             ],
@@ -138,7 +162,7 @@ class _ToDoListState extends State<ToDoList> {
                       GestureDetector(
                         child: Icon(Icons.add),
                         onTap: () {
-                          _displayDialogAddNewTodo(context);
+                          _displayDialogAddNewTodo(context, null);
                         },
                       ),
                     ],
@@ -150,10 +174,10 @@ class _ToDoListState extends State<ToDoList> {
             parentAction: (value) {
               widget.parentAction(value);
             },
+            parentActionEditToDo: (value) {
+              _displayDialogAddNewTodo(context, value);
+            },
           )
-          /*TableViewManager(
-            list: widget.list,
-          )*/
         ],
       )),
     );

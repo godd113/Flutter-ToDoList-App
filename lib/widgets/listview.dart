@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/databases/todo_text_db.dart';
+import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/widgets/card_todo.dart';
 import 'package:todo/widgets/tableview_row.dart';
@@ -7,9 +8,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ListViewManager extends StatefulWidget {
   final ValueChanged<String> parentAction;
+  final ValueChanged<ModelTextToDo> parentActionEditToDo;
   int indexObject;
   ListViewManager(
-      {super.key, required this.indexObject, required this.parentAction});
+      {super.key,
+      required this.indexObject,
+      required this.parentAction,
+      required this.parentActionEditToDo});
 
   @override
   State<ListViewManager> createState() => _ListViewManagerState();
@@ -42,9 +47,24 @@ class _ListViewManagerState extends State<ListViewManager> {
                 key: const ValueKey(0),
                 // The end action pane is the one at the right or the bottom side.
                 endActionPane: ActionPane(
-                  extentRatio: 0.16,
+                  extentRatio: 0.3,
                   motion: const ScrollMotion(),
                   children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        widget.parentActionEditToDo(
+                            oCard!.oModelCard.listToDo[index]);
+                        //setState(() {
+                        //oCard!.oModelCard.listToDo[index].textToDoName = "";
+                        //_db.update(oCard!.oModelCard.listToDo[index]);
+                        //});
+                        print("edit object");
+                      },
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      icon: Icons.edit,
+                      //label: '',
+                    ),
                     SlidableAction(
                       onPressed: (context) {
                         _db.delete(
@@ -66,8 +86,13 @@ class _ListViewManagerState extends State<ListViewManager> {
                 // The child of the Slidable is what the user sees when the
                 // component is not dragged.
                 child: TableViewRowManager(
-                    oTextToDo: oCard!.oModelCard.listToDo[index],
-                    tintColor: oCard!.oModelCard.color),
+                  oTextToDo: oCard!.oModelCard.listToDo[index],
+                  tintColor: oCard!.oModelCard.color,
+                  parentActionEdit: (value) {
+                    widget.parentActionEditToDo(
+                        oCard!.oModelCard.listToDo[index]);
+                  },
+                ),
               ),
             );
           }),

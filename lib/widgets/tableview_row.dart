@@ -4,9 +4,13 @@ import 'package:todo/models/modelTextToDo.dart';
 
 class TableViewRowManager extends StatefulWidget {
   ModelTextToDo oTextToDo;
+  final ValueChanged<ModelTextToDo> parentActionEdit;
   Color tintColor = Colors.black;
   TableViewRowManager(
-      {super.key, required this.oTextToDo, required this.tintColor});
+      {super.key,
+      required this.oTextToDo,
+      required this.tintColor,
+      required this.parentActionEdit});
 
   @override
   State<TableViewRowManager> createState() => _TableViewRowManagerState();
@@ -29,10 +33,10 @@ class _TableViewRowManagerState extends State<TableViewRowManager> {
             child: Container(
           height: 40,
           padding: const EdgeInsets.only(left: 10),
-          child: GestureDetector(
-            child: Row(
-              children: [
-                Container(
+          child: Row(
+            children: [
+              GestureDetector(
+                child: Container(
                   child: widget.oTextToDo.done == false
                       ? SizedBox(
                           height: 30,
@@ -49,20 +53,27 @@ class _TableViewRowManagerState extends State<TableViewRowManager> {
                           ),
                         ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(widget.oTextToDo.textToDoName)
-              ],
-            ),
-            onTap: () {
-              setState(() {
-                widget.oTextToDo.done = !widget.oTextToDo.done;
-                _db.update(widget.oTextToDo);
-              });
-              print(
-                  "tap tap! ==> ${widget.oTextToDo.textToDoID} : ${widget.oTextToDo.textToDoName}");
-            },
+                onTap: () {
+                  setState(() {
+                    widget.oTextToDo.done = !widget.oTextToDo.done;
+                    _db.update(widget.oTextToDo);
+                  });
+                  print(
+                      "tap tap! ==> ${widget.oTextToDo.textToDoID} : ${widget.oTextToDo.textToDoName}");
+                },
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+                child: Text(widget.oTextToDo.textToDoName),
+                onTap: () {
+                  widget.parentActionEdit(widget.oTextToDo);
+                  print(
+                      "tap tap text! ==> ${widget.oTextToDo.textToDoID} : ${widget.oTextToDo.textToDoName}");
+                },
+              )
+            ],
           ),
         )),
       ],

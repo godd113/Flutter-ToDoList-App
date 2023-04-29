@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:todo/databases/todo_text_db.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/widgets/card_todo.dart';
 import 'package:todo/widgets/tableview_row.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ListViewManager extends StatefulWidget {
+  final ValueChanged<String> parentAction;
   int indexObject;
-  ListViewManager({super.key, required this.indexObject});
+  ListViewManager(
+      {super.key, required this.indexObject, required this.parentAction});
 
   @override
   State<ListViewManager> createState() => _ListViewManagerState();
@@ -14,11 +17,13 @@ class ListViewManager extends StatefulWidget {
 
 class _ListViewManagerState extends State<ListViewManager> {
   CardToDo? oCard;
+  late ToDoTextDatabase _db;
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    _db = ToDoTextDatabase.instance;
     oCard = ModuleCenter.listCards[widget.indexObject];
+    super.initState();
   }
 
   @override
@@ -38,13 +43,17 @@ class _ListViewManagerState extends State<ListViewManager> {
                 // The end action pane is the one at the right or the bottom side.
                 endActionPane: ActionPane(
                   extentRatio: 0.16,
-                  motion: ScrollMotion(),
+                  motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
                       onPressed: (context) {
+                        _db.delete(
+                            oCard!.oModelCard.listToDo[index].textToDoID);
                         setState(() {
                           oCard!.oModelCard.listToDo.removeAt(index);
                         });
+                        widget.parentAction(
+                            oCard!.oModelCard.listToDo.length.toString());
                         print("delete object");
                       },
                       backgroundColor: Colors.redAccent,

@@ -28,9 +28,12 @@ class _LaunchScreenState extends State<LaunchScreen> {
             decoration: const BoxDecoration(color: Colors.transparent),
             height: 500, // specify the height of the container
             child: Column(children: [
+              const SizedBox(
+                height: 20,
+              ),
               Center(
                 child: Image.asset(
-                  'assets/images/vectors/vector_todo.png',
+                  'assets/images/vectors/open_page_x.png',
                   height: 330,
                 ),
               ),
@@ -44,7 +47,7 @@ class _LaunchScreenState extends State<LaunchScreen> {
                       fontSize: 50,
                       fontStyle: FontStyle.normal,
                       fontFamily: 'Kanit'),
-                  child: const Text('To Do'),
+                  child: const Text('Do It!'),
                 ),
               )
             ])),

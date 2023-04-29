@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:todo/databases/todo_list_db.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
+import 'package:todo/modules/module_colors.dart';
 import 'package:todo/pages/todo_list.dart';
+import 'package:todo/widgets/cupertino_actionsheet.dart';
 
 class CardToDo extends StatefulWidget {
   ModelToDoCard oModelCard;
@@ -14,11 +17,50 @@ class CardToDo extends StatefulWidget {
 }
 
 class _CardToDoState extends State<CardToDo> {
+  late ToDoListDatabase _db;
+  int index = 0;
+  late TCupertinoActionSheet actsheet = TCupertinoActionSheet(
+    parentActionShow: _showDetailCard,
+    parentActionDelete: _deleteDetailCard,
+    parentActionEdit: _editDetailCard,
+  );
+
+  Future<void> _showDetailCard(int value) async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ToDoList(
+              indexObject: index,
+              parentAction: (value) {
+                setState(() {
+                  widget.oModelCard.todoCardTaskNum = value;
+                });
+              },
+              oModuleCard: ModuleCenter.listCards[index].oModelCard)),
+    );
+  }
+
+  Future<void> _editDetailCard(int value) async {}
+
+  Future<void> _deleteDetailCard(int value) async {
+    _db.delete(value);
+    setState(() {
+      ModuleCenter.listCards.removeAt(index);
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    index = ModuleCenter.listCards.indexWhere((element) =>
+        element.oModelCard.todoCardID == widget.oModelCard.todoCardID);
+    _db = ToDoListDatabase.instance;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenDeviceWidth = MediaQuery.of(context).size.width;
-    int index = ModuleCenter.listCards.indexWhere((element) =>
-        element.oModelCard.todoCardID == widget.oModelCard.todoCardID);
     ModelIcon imgIcon = widget.allIcons
         .firstWhere((icon) => icon.iconID == widget.oModelCard.iconID);
     return GestureDetector(
@@ -34,33 +76,41 @@ class _CardToDoState extends State<CardToDo> {
             children: [
               Icon(
                 imgIcon.icon,
-                color: ModuleCenter.darken(widget.oModelCard.color),
+                color: ModuleColors.fontCardColor,
               ),
               Container(
-                padding: EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 5),
                 width: (screenDeviceWidth - 105),
                 child: Text(
                   widget.oModelCard.todoCardName,
                   style: TextStyle(
-                      color: ModuleCenter.darken(widget.oModelCard.color),
+                      color: ModuleColors.fontCardColor,
                       fontSize: 25,
                       fontFamily: 'Kanit'),
                 ),
               ),
-              Container(
-                child: Icon(Icons.more_horiz),
+              GestureDetector(
+                child: Container(
+                  child: const Icon(Icons.more_horiz),
+                ),
+                onTap: () {
+                  actsheet.showActionSheet(
+                      context,
+                      widget.oModelCard.todoCardName,
+                      widget.oModelCard.todoCardID);
+                },
               )
             ],
           ),
           Row(
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 30,
               ),
               Text(
                 '${widget.oModelCard.todoCardTaskNum} Tasks',
                 style: TextStyle(
-                    color: ModuleCenter.darken(widget.oModelCard.color),
+                    color: ModuleColors.fontCardColor,
                     fontSize: 15,
                     fontFamily: 'Kanit'),
               )
@@ -69,18 +119,7 @@ class _CardToDoState extends State<CardToDo> {
         ]),
       ),
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ToDoList(
-                  indexObject: index,
-                  parentAction: (value) {
-                    setState(() {
-                      widget.oModelCard.todoCardTaskNum = value;
-                    });
-                  },
-                  oModuleCard: ModuleCenter.listCards[index].oModelCard)),
-        );
+        _showDetailCard(widget.oModelCard.todoCardID);
       },
     );
   }

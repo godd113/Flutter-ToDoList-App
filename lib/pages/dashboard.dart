@@ -2,12 +2,13 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:todo/databases/todo_list_db.dart';
+import 'package:todo/databases/users_db.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/pages/card_manager.dart';
-
+import 'package:uuid/uuid.dart';
 import '../modules/module_colors.dart';
 import '../widgets/card_todo.dart';
 
@@ -21,12 +22,18 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   late ToDoListDatabase _db;
+  late UserDatabase _userdb;
+  late Uuid _uuid = Uuid();
+  late String userUUID;
   late List<ModelToDoCard> listToDoCard;
 
   @override
   void initState() {
     // TODO: implement initState
     _db = ToDoListDatabase.instance;
+    _userdb = UserDatabase.instance;
+    userUUID = _uuid.v1();
+    print(userUUID);
     getDBToDoList();
     //_db.create(ModuleCenter.listCards[0].oModelCard);
     super.initState();
@@ -38,18 +45,28 @@ class _DashboardState extends State<Dashboard> {
     listToDoCard = await _db.selectDataFromTable();
     int i = 0;
     setState(() {
-      for (var element in listToDoCard) {
-        ModuleCenter.listCards.add(CardToDo(oModelCard: element));
-        i += 1;
+      //-- Default the first one
+      if (listToDoCard.length == 0) {
+        ModuleCenter.listCards.add(CardToDo(
+            oModelCard: ModelToDoCard(
+                todoCardID: int.parse(ModuleCenter.genIDByDatetimeNow()),
+                todoCardName: "ToDo",
+                todoCardTaskNum: "0",
+                iconID: 1,
+                color: ModuleColors.defualtColorCard,
+                listToDo: [])));
+      } else {
+        for (var element in listToDoCard) {
+          ModuleCenter.listCards.add(CardToDo(oModelCard: element));
+          i += 1;
+        }
+        ModuleCenter.listCards.sort((a, b) =>
+            b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
       }
-      ModuleCenter.listCards.sort(
-          (a, b) => b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
     });
-
-    print("xxx");
   }
 
-  Future<String> click() async {
+  Future<String> clickSetting() async {
     print('click setting');
     return 'click';
   }
@@ -72,8 +89,8 @@ class _DashboardState extends State<Dashboard> {
           leading: GestureDetector(
             child: const Icon(Icons.settings),
             onTap: () {
-              Future<String> x = click();
-              print(x);
+              Future<String> ret = clickSetting();
+              print(ret);
             },
           ),
         ),

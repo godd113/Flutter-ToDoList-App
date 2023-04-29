@@ -1,18 +1,18 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:todo/models/modelTextToDo.dart';
+import 'package:todo/models/modelUser.dart';
 
-class ToDoTextDatabase {
-  static final ToDoTextDatabase instance = ToDoTextDatabase._init();
+class UserDatabase {
+  static final UserDatabase instance = UserDatabase._init();
   static Database? _database;
 
-  ToDoTextDatabase._init();
+  UserDatabase._init();
 
   Future<Database> get database_list async {
     // ถ้ามีฐานข้อมูลนี้แล้วคืนค่า
     if (_database != null) return _database!;
     // ถ้ายังไม่มี สร้างฐานข้อมูล กำหนดชื่อ นามสกุล .db
-    _database = await _initDB('todolist_todotext.db');
+    _database = await _initDB('users.db');
     // คืนค่าฐานข้อมูล
     return _database!;
   }
@@ -37,53 +37,52 @@ class ToDoTextDatabase {
 
     // ทำคำสั่งสร้างตาราง
     await db.execute('''
-CREATE TABLE $tableToDoText (
-  ${ToDoTextFields.textToDoID} $idType,
-  ${ToDoTextFields.todoCardID} $intType,
-  ${ToDoTextFields.textToDoName} $textType,
-  ${ToDoTextFields.done} $boolType,
-  FOREIGN KEY (${ToDoTextFields.todoCardID}) REFERENCES todolist (_id)
+CREATE TABLE $tableUser (
+  ${UserFields.userID} $idType,
+  ${UserFields.userName} $textType,
+  ${UserFields.email} $textType,
+  ${UserFields.uuid} $textType
 )
 ''');
   }
 
-  Future<ModelTextToDo> createToDoText(ModelTextToDo todoText) async {
+  Future<ModelUser> create(ModelUser obj) async {
     final db = await instance.database_list; // อ้างอิงฐานข้อมูล
 
-    final id = await db.insert(tableToDoText, todoText.toJson());
-    return todoText.copy(textToDoID: id);
+    final id = await db.insert(tableUser, obj.toJson());
+    return obj.copy(userID: id);
   }
 
   // คำสั่งสำหรับแสดงข้อมูลหนังสือตามค่า id ที่ส่งมา
-  Future<ModelTextToDo> readToDoText(int id) async {
+  Future<ModelUser> read(int id) async {
     final db = await instance.database_list; // อ้างอิงฐานข้อมูล
 
     // ทำคำสั่งคิวรี่ข้อมูลตามเงื่อนไข
     final maps = await db.query(
-      tableToDoText,
-      columns: ToDoTextFields.values,
-      where: '${ToDoTextFields.textToDoID} = ?',
+      tableUser,
+      columns: UserFields.values,
+      where: '${UserFields.userID} = ?',
       whereArgs: [id],
     );
 
     // ถ้ามีข้อมูล แสดงข้อมูลกลับออกไป
     if (maps.isNotEmpty) {
-      return ModelTextToDo.fromJson(maps.first);
+      return ModelUser.fromJson(maps.first);
     } else {
       // ถ้าไม่มีแสดง error
       throw Exception('ID $id not found');
     }
   }
 
-  Future<int> update(ModelTextToDo oTodoText) async {
+  Future<int> update(ModelUser obj) async {
     final db = await instance.database_list; // อ้างอิงฐานข้อมูล
 
     // คืนค่าเป็นตัวเลขจำนวนรายการที่มีการเปลี่ยนแปลง
     return db.update(
-      tableToDoText,
-      oTodoText.toJson(),
-      where: '${ToDoTextFields.textToDoID} = ?',
-      whereArgs: [oTodoText.textToDoID],
+      tableUser,
+      obj.toJson(),
+      where: '${UserFields.userID} = ?',
+      whereArgs: [obj.userID],
     );
   }
 
@@ -92,19 +91,8 @@ CREATE TABLE $tableToDoText (
 
     // คืนค่าเป็นตัวเลขจำนวนรายการที่มีการเปลี่ยนแปลง
     return db.delete(
-      tableToDoText,
-      where: '${ToDoTextFields.textToDoID} = ?',
-      whereArgs: [id],
-    );
-  }
-
-  Future<int> deleteByCardID(int id) async {
-    final db = await instance.database_list; // อ้างอิงฐานข้อมูล
-
-    // คืนค่าเป็นตัวเลขจำนวนรายการที่มีการเปลี่ยนแปลง
-    return db.delete(
-      tableToDoText,
-      where: '${ToDoTextFields.todoCardID} = ?',
+      tableUser,
+      where: '${UserFields.userID} = ?',
       whereArgs: [id],
     );
   }
@@ -113,21 +101,21 @@ CREATE TABLE $tableToDoText (
     final db = await instance.database_list; // อ้างอิงฐานข้อมูล
     // คืนค่าเป็นตัวเลขจำนวนรายการที่มีการเปลี่ยนแปลง
     return db.delete(
-      tableToDoText,
+      tableUser,
     );
   }
 
-  Future<List<ModelTextToDo>> selectDataFromTableToDoText(int id) async {
+  Future<List<ModelUser>> selectDataFromTableByUUID(String uuid) async {
     final db = await instance.database_list;
-    final orderBy = '${ToDoTextFields.textToDoID} ASC';
-    final whereCondition = '${ToDoTextFields.todoCardID} = ${id}';
+    final orderBy = '${UserFields.userID} ASC';
+    final whereCondition = '${UserFields.uuid} = ${uuid}';
     List<Map<String, dynamic>> result =
-        await db.query(tableToDoText, orderBy: orderBy, where: whereCondition);
+        await db.query(tableUser, orderBy: orderBy, where: whereCondition);
 
     // ข้อมูลในฐานข้อมูลปกติเป็น json string data เวลาสั่งค่ากลับต้องทำการ
     // แปลงข้อมูล จาก json ไปเป็น object กรณีแสดงหลายรายการก็ทำเป็น List
-    List<ModelTextToDo> _objects =
-        result.map((json) => ModelTextToDo.fromJson(json)).toList();
+    List<ModelUser> _objects =
+        result.map((json) => ModelUser.fromJson(json)).toList();
 
     return _objects;
   }

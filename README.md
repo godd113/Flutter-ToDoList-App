@@ -1,6 +1,9 @@
 # Do It! App [flutter]
 
-This is demo application develop by me and my cat name ```Nutsu``` is a main charactor (design by [swim_on_bed](https://instagram.com/swim_on_bed?igshid=YmMyMTA2M2Y=)).
+This is To Do List application develop by me and my cat name ```Nutsu``` is a main charactor (design by [swim_on_bed](https://instagram.com/swim_on_bed?igshid=YmMyMTA2M2Y=)).
+
+## About this app
+You can create your own todo list and plan your daily task or shopping and working list and check mark it! when the task was done!
 
 <img
   src="/assets/images/logo/logo_icon_x.png"

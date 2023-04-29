@@ -10,7 +10,8 @@ import 'package:todo/widgets/cupertino_actionsheet.dart';
 class CardToDo extends StatefulWidget {
   ModelToDoCard oModelCard;
   final List<ModelIcon> allIcons = ModuleCenter.listIcons;
-  CardToDo({super.key, required this.oModelCard});
+  final ValueChanged<CardToDo> parentAction;
+  CardToDo({super.key, required this.oModelCard, required this.parentAction});
 
   @override
   State<CardToDo> createState() => _CardToDoState();
@@ -43,10 +44,7 @@ class _CardToDoState extends State<CardToDo> {
   Future<void> _editDetailCard(int value) async {}
 
   Future<void> _deleteDetailCard(int value) async {
-    _db.delete(value);
-    setState(() {
-      ModuleCenter.listCards.removeAt(index);
-    });
+    widget.parentAction(ModuleCenter.listCards[index]);
   }
 
   @override

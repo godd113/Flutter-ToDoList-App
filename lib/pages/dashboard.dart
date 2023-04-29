@@ -1,16 +1,14 @@
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:todo/databases/todo_list_db.dart';
 import 'package:todo/databases/users_db.dart';
-import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/pages/card_manager.dart';
-import 'package:uuid/uuid.dart';
 import '../modules/module_colors.dart';
 import '../widgets/card_todo.dart';
+import '../models/modelUser.dart';
 
 class Dashboard extends StatefulWidget {
   Dashboard({super.key});
@@ -23,17 +21,15 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   late ToDoListDatabase _db;
   late UserDatabase _userdb;
-  late Uuid _uuid = Uuid();
-  late String userUUID;
   late List<ModelToDoCard> listToDoCard;
+  late ModelUser oUser =
+      ModelUser(userID: 0, userName: "", email: "", uuid: "");
 
   @override
   void initState() {
     // TODO: implement initState
     _db = ToDoListDatabase.instance;
     _userdb = UserDatabase.instance;
-    userUUID = _uuid.v1();
-    print(userUUID);
     getDBToDoList();
     //_db.create(ModuleCenter.listCards[0].oModelCard);
     super.initState();
@@ -43,26 +39,45 @@ class _DashboardState extends State<Dashboard> {
     ModuleCenter.listCards = [];
     List<ModelTextToDo> listItem = [];
     listToDoCard = await _db.selectDataFromTable();
+    List<ModelUser> listUser =
+        await _userdb.selectDataFromTableByUUID("userUUID");
+    if (listUser.isNotEmpty) {
+      oUser = listUser[0];
+    }
     int i = 0;
     setState(() {
       //-- Default the first one
-      if (listToDoCard.length == 0) {
-        ModuleCenter.listCards.add(CardToDo(
-            oModelCard: ModelToDoCard(
-                todoCardID: int.parse(ModuleCenter.genIDByDatetimeNow()),
-                todoCardName: "ToDo",
-                todoCardTaskNum: "0",
-                iconID: 1,
-                color: ModuleColors.defualtColorCard,
-                listToDo: [])));
+      if (listToDoCard.length == 0 && oUser.uuid == "") {
+        addNewList(ModelToDoCard(
+            todoCardID: int.parse(ModuleCenter.genIDByDatetimeNow()),
+            todoCardName: "ToDo",
+            todoCardTaskNum: "0",
+            iconID: 1,
+            color: ModuleColors.defualtColorCard,
+            listToDo: []));
+        oUser.userID = 1;
+        oUser.uuid = "userUUID";
+        _userdb.create(oUser);
       } else {
         for (var element in listToDoCard) {
-          ModuleCenter.listCards.add(CardToDo(oModelCard: element));
+          ModuleCenter.listCards.add(CardToDo(
+            oModelCard: element,
+            parentAction: _cardAction,
+          ));
           i += 1;
         }
         ModuleCenter.listCards.sort((a, b) =>
             b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
       }
+    });
+  }
+
+  Future<void> _cardAction(CardToDo oCard) async {
+    int index = ModuleCenter.listCards.indexWhere((element) =>
+        element.oModelCard.todoCardID == oCard.oModelCard.todoCardID);
+    _db.delete(oCard.oModelCard.todoCardID);
+    setState(() {
+      ModuleCenter.listCards.removeAt(index);
     });
   }
 
@@ -72,7 +87,10 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Future<void> addNewList(ModelToDoCard oModelCard) async {
-    ModuleCenter.listCards.add(CardToDo(oModelCard: oModelCard));
+    ModuleCenter.listCards.add(CardToDo(
+      oModelCard: oModelCard,
+      parentAction: _cardAction,
+    ));
     ModuleCenter.listCards.sort(
         (a, b) => b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
     _db.create(oModelCard);
@@ -83,7 +101,7 @@ class _DashboardState extends State<Dashboard> {
     final double screenDeviceSize = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-          title: const Text('To Do'),
+          title: const Text('To Do List'),
           backgroundColor: ModuleColors.themeColor,
           automaticallyImplyLeading: false, // This will remove the back button
           leading: GestureDetector(

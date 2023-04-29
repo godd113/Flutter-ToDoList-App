@@ -108,7 +108,7 @@ CREATE TABLE $tableUser (
   Future<List<ModelUser>> selectDataFromTableByUUID(String uuid) async {
     final db = await instance.database_list;
     final orderBy = '${UserFields.userID} ASC';
-    final whereCondition = '${UserFields.uuid} = ${uuid}';
+    final whereCondition = '${UserFields.uuid} = "${uuid}"';
     List<Map<String, dynamic>> result =
         await db.query(tableUser, orderBy: orderBy, where: whereCondition);
 

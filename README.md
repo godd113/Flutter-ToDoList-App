@@ -6,7 +6,13 @@ This is demo application develop by me and my cat name ```Nutsu``` is a main cha
   src="/assets/images/logo/logo_icon_x.png"
   alt="Alt text"
   title="Nutsu_TheCat"
-  style="display: inline-block; margin: 0 auto; width: 300px">
+  style="display: inline-block; margin: 0 auto; width: 150px">
+
+  <img
+  src="/assets/images/screens/screen1.png"
+  alt="Alt text"
+  title="Nutsu_TheCat"
+  style="display: inline-block; margin: 0 auto; width: 250px">
 
 ## Getting Started
 

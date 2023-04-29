@@ -10,8 +10,6 @@ This is demo application develop by me and my cat name ```Nutsu``` is a main cha
 
 ## Getting Started
 
-Building
-
 1. Download or Clone project 
 2. Open project with VS Code or Android Studio
 3. Open terminal VS Code and input command ```flutter pub get```

@@ -1,7 +1,13 @@
-# todo
+# Do It! App [flutter]
 
-My First Flutter project : ToDo List App
+This is demo application develop by me and my cat is a main charactor (design by [WordDisplay](https://instagram.com/swim_on_bed?igshid=YmMyMTA2M2Y=)).
+
+[![alt][linkToImage](https://drive.google.com/file/d/1Yf3GXoXkIzpuOC0-4ZjQjgebm9CMTXtk/view?usp=sharing)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Building
+
+1. Download or Clone project 
+2. Open project with VS Code or Android Studio
+3. Open terminal VS Code and input command ```flutter pub get```

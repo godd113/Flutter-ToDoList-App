@@ -34,8 +34,6 @@ Building
   title="Nutsu_TheCat"
   style="display: inline-block; margin: 0 auto; width: 250px">
     </td>
-    </tr>
-    <tr>
     <td>
     <img
   src="/assets/images/screens/screen3.png"

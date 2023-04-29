@@ -6,7 +6,6 @@ import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/widgets/listview.dart';
 import 'package:todo/widgets/tableview_row.dart';
-import 'package:intl/intl.dart';
 
 class ToDoList extends StatefulWidget {
   ModelToDoCard oModuleCard;
@@ -56,7 +55,7 @@ class _ToDoListState extends State<ToDoList> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('New Reminder'),
+            title: const Text('New Reminder'),
             content: TextField(
               onChanged: (value) {
                 setState(() {
@@ -64,7 +63,8 @@ class _ToDoListState extends State<ToDoList> {
                 });
               },
               controller: _textFieldController,
-              decoration: InputDecoration(hintText: "Input your todolist"),
+              decoration:
+                  const InputDecoration(hintText: "Input your todolist"),
             ),
             actions: <Widget>[
               MaterialButton(
@@ -75,8 +75,7 @@ class _ToDoListState extends State<ToDoList> {
                   if (todoNew.trim() == "") {
                     return;
                   }
-                  String _id =
-                      DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+                  String _id = ModuleCenter.genIDByDatetimeNow();
                   ModelTextToDo oText = ModelTextToDo(
                       textToDoID: int.parse(_id),
                       todoCardID: widget.oModuleCard.todoCardID,
@@ -117,8 +116,8 @@ class _ToDoListState extends State<ToDoList> {
           Container(
               width: MediaQuery.of(context).size.width,
               height: 50,
-              decoration:
-                  BoxDecoration(color: Color.fromARGB(255, 229, 229, 229)),
+              decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 229, 229, 229)),
               child: Column(
                 children: [
                   Row(
@@ -131,7 +130,7 @@ class _ToDoListState extends State<ToDoList> {
                               padding: const EdgeInsets.only(left: 40),
                               child: Text(
                                 widget.oModuleCard.todoCardName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
                                     fontFamily: 'Kanit'),
@@ -148,6 +147,9 @@ class _ToDoListState extends State<ToDoList> {
               )),
           ListViewManager(
             indexObject: widget.indexObject,
+            parentAction: (value) {
+              widget.parentAction(value);
+            },
           )
           /*TableViewManager(
             list: widget.list,

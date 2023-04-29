@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:todo/customs/icons/app_icons.dart';
 import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelToDoCard.dart';
+import 'package:todo/models/modelUser.dart';
 import 'package:todo/widgets/card_todo.dart';
+import 'package:intl/intl.dart';
 
 class ModuleCenter {
+  static ModelUser? oUser;
   static List<ModelIcon> listIcons = [
     ModelIcon(iconID: 1, icon: Icons.work),
     ModelIcon(iconID: 2, icon: Icons.cast_for_education),
@@ -61,5 +64,9 @@ class ModuleCenter {
     }
 
     return hslDark.toColor();
+  }
+
+  static String genIDByDatetimeNow() {
+    return DateFormat('yyyyMMddHHmmss').format(DateTime.now());
   }
 }

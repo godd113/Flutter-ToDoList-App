@@ -121,7 +121,8 @@ CREATE TABLE $tableToDoText (
 
   Future<int> delete(int id) async {
     final db = await instance.database; // อ้างอิงฐานข้อมูล
-
+    final dbText = ToDoTextDatabase.instance;
+    dbText.deleteByCardID(id);
     // คืนค่าเป็นตัวเลขจำนวนรายการที่มีการเปลี่ยนแปลง
     return db.delete(
       tableToDoList,

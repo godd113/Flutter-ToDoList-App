@@ -1,8 +1,8 @@
 # Do It! App [flutter]
 
-This is demo application develop by me and my cat is a main charactor (design by [WordDisplay](https://instagram.com/swim_on_bed?igshid=YmMyMTA2M2Y=)).
+This is demo application develop by me and my cat is a main charactor (design by [SwimOnBed](https://instagram.com/swim_on_bed?igshid=YmMyMTA2M2Y=)).
 
-[![alt][linkToImage](https://drive.google.com/file/d/1Yf3GXoXkIzpuOC0-4ZjQjgebm9CMTXtk/view?usp=sharing)
+[![image][https://drive.google.com/file/d/1Yf3GXoXkIzpuOC0-4ZjQjgebm9CMTXtk/view?usp=sharing](https://drive.google.com/file/d/1Yf3GXoXkIzpuOC0-4ZjQjgebm9CMTXtk/view?usp=sharing)
 
 ## Getting Started
 

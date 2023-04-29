@@ -4,6 +4,7 @@ import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelTextToDo.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
+import 'package:todo/modules/module_colors.dart';
 import 'package:todo/widgets/listview.dart';
 import 'package:todo/widgets/tableview_row.dart';
 
@@ -133,6 +134,9 @@ class _ToDoListState extends State<ToDoList> {
           child: Icon(imgIcon.icon),
         ),
         backgroundColor: widget.oModuleCard.color,
+        iconTheme: IconThemeData(
+          color: ModuleColors.fontCardColor, //change your color here
+        ),
       ),
       body: SingleChildScrollView(
           child: Column(

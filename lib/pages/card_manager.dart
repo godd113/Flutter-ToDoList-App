@@ -12,23 +12,24 @@ class CardManager extends StatefulWidget {
   // create some values
   Color pickerColor = const Color(0xff443a49);
   Color currentColor = const Color(0xff443a49);
-  final ValueChanged<ModelToDoCard> parentAction;
+  final ValueChanged<ModelToDoCard> parentActionAdd;
+  final ValueChanged<ModelToDoCard> parentActionEdit;
 
-  ModelToDoCard? oCard = ModelToDoCard(
-      todoCardID: 0,
-      todoCardName: "",
-      todoCardTaskNum: "0",
-      iconID: 0,
-      color: Colors.transparent,
-      listToDo: []);
-
-  CardManager({super.key, required this.parentAction});
+  ModelToDoCard oCard;
+  bool isEdit;
+  CardManager(
+      {super.key,
+      required this.parentActionAdd,
+      required this.parentActionEdit,
+      required this.oCard,
+      required this.isEdit});
 
   @override
   State<CardManager> createState() => _CardManagerState();
 }
 
 class _CardManagerState extends State<CardManager> {
+  TextEditingController? _textFieldController;
   // ValueChanged<Color> callback
   void changeColor(Color color) {
     setState(() => widget.pickerColor = color);
@@ -42,24 +43,30 @@ class _CardManagerState extends State<CardManager> {
 
   @override
   Widget build(BuildContext context) {
+    _textFieldController = TextEditingController(
+        text: !widget.isEdit ? "" : widget.oCard.todoCardName.toString());
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Add New'),
+          title: Text(widget.isEdit ? 'Edit' : 'Add New'),
           backgroundColor: ModuleColors.themeColor,
           actions: [
             TextButton(
               onPressed: () {
-                if (widget.oCard!.todoCardName.trim() == "" ||
-                    widget.oCard!.iconID == 0 ||
-                    widget.oCard!.color == Colors.transparent) {
+                if (widget.oCard.todoCardName.trim() == "" ||
+                    widget.oCard.iconID == 0 ||
+                    widget.oCard.color == Colors.transparent) {
                   _asyncWarningDialog(context);
                   return;
                 }
                 // Do something when the user taps the "Done" button
-                var widget2 = widget.oCard;
-                String idCard = ModuleCenter.genIDByDatetimeNow();
-                widget2!.todoCardID = int.parse(idCard);
-                widget.parentAction(widget2!);
+                if (widget.isEdit) {
+                  widget.parentActionEdit(widget.oCard);
+                } else {
+                  var widget2 = widget.oCard;
+                  String idCard = ModuleCenter.genIDByDatetimeNow();
+                  widget2.todoCardID = int.parse(idCard);
+                  widget.parentActionAdd(widget2);
+                }
                 Navigator.of(context).pop();
                 print('Doneeee!');
               },
@@ -111,8 +118,9 @@ class _CardManagerState extends State<CardManager> {
                                 border: InputBorder.none,
                                 hintText: 'Enter your category name',
                               ),
+                              controller: _textFieldController,
                               onChanged: (text) {
-                                widget.oCard?.todoCardName = text.toString();
+                                widget.oCard.todoCardName = text.toString();
                               },
                             )))),
               ],
@@ -152,16 +160,7 @@ class _CardManagerState extends State<CardManager> {
                                   widget.oCard!.color = Color.fromRGBO(
                                       value.r, value.g, value.b, value.alpha);
                                 },
-                                selectionColor: '')
-                            /*BlockPicker(
-                        pickerColor: widget.pickerColor, //default color
-                        onColorChanged: (Color color) {
-                          //on color picked
-                          widget.pickerColor = color;
-                          widget.oCard?.color = color;
-                        },
-                      ),*/
-                            ))),
+                                selectionColor: '')))),
               ],
             ),
             Row(

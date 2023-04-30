@@ -11,6 +11,7 @@ class ModelToDoCard {
   String todoCardTaskNum;
   int iconID;
   Color color;
+
   List<ModelTextToDo> listToDo;
 
   ModelToDoCard(

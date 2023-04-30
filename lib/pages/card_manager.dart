@@ -79,130 +79,150 @@ class _CardManagerState extends State<CardManager> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
+        body: GestureDetector(
+          child: SingleChildScrollView(
             child: Column(
-          children: [
-            Row(
               children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 20, top: 20),
-                  alignment: Alignment.topLeft,
-                  child: const Text(
-                    'Name',
-                    style: TextStyle(
-                        color: Colors.black, fontSize: 20, fontFamily: 'Kanit'),
-                  ),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, top: 20),
+                      alignment: Alignment.topLeft,
+                      child: const Text(
+                        'Name',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontFamily: 'Kanit'),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(left: 20),
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: 70,
+                        child: Center(
+                            child: Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                transformAlignment: Alignment.topCenter,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 216, 216, 216),
+                                        style: BorderStyle.solid)),
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: TextField(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Enter your category name',
+                                  ),
+                                  controller: _textFieldController,
+                                  onChanged: (text) {
+                                    widget.oCard.todoCardName = text.toString();
+                                  },
+                                )))),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, top: 10),
+                      alignment: Alignment.topLeft,
+                      child: const Text(
+                        'Color',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontFamily: 'Kanit'),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(left: 20, top: 10),
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            border: Border.all(
+                                color: const Color.fromARGB(255, 216, 216, 216),
+                                style: BorderStyle.solid)),
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: 200,
+                        child: Center(
+                            child: Container(
+                                transformAlignment: Alignment.topCenter,
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: TColorPicker(
+                                    parentActions: (value) {
+                                      widget.oCard.color = Color.fromRGBO(
+                                          value.r,
+                                          value.g,
+                                          value.b,
+                                          value.alpha);
+                                    },
+                                    selectionColor: '')))),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 20, top: 20),
+                      alignment: Alignment.topLeft,
+                      child: const Text(
+                        'Icon',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontFamily: 'Kanit'),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                        margin: const EdgeInsets.only(left: 20, top: 10),
+                        width: MediaQuery.of(context).size.width - 40,
+                        height: 300,
+                        child: Center(
+                            child: Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                transformAlignment: Alignment.topCenter,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color:
+                                            Color.fromARGB(255, 216, 216, 216),
+                                        style: BorderStyle.solid)),
+                                width: MediaQuery.of(context).size.width - 40,
+                                child: PickerIcon(
+                                  parentAction: (value) {
+                                    widget.oCard?.iconID = value;
+                                    print('==> ${value}');
+                                  },
+                                )))),
+                  ],
                 ),
               ],
             ),
-            Row(
-              children: [
-                Container(
-                    margin: const EdgeInsets.only(left: 20),
-                    width: MediaQuery.of(context).size.width - 40,
-                    height: 70,
-                    child: Center(
-                        child: Container(
-                            padding: const EdgeInsets.only(left: 10),
-                            transformAlignment: Alignment.topCenter,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 216, 216, 216),
-                                    style: BorderStyle.solid)),
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Enter your category name',
-                              ),
-                              controller: _textFieldController,
-                              onChanged: (text) {
-                                widget.oCard.todoCardName = text.toString();
-                              },
-                            )))),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 20, top: 10),
-                  alignment: Alignment.topLeft,
-                  child: const Text(
-                    'Color',
-                    style: TextStyle(
-                        color: Colors.black, fontSize: 20, fontFamily: 'Kanit'),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                    margin: const EdgeInsets.only(left: 20, top: 10),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        border: Border.all(
-                            color: const Color.fromARGB(255, 216, 216, 216),
-                            style: BorderStyle.solid)),
-                    width: MediaQuery.of(context).size.width - 40,
-                    height: 200,
-                    child: Center(
-                        child: Container(
-                            transformAlignment: Alignment.topCenter,
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: TColorPicker(
-                                parentActions: (value) {
-                                  widget.oCard!.color = Color.fromRGBO(
-                                      value.r, value.g, value.b, value.alpha);
-                                },
-                                selectionColor: '')))),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 20, top: 20),
-                  alignment: Alignment.topLeft,
-                  child: const Text(
-                    'Icon',
-                    style: TextStyle(
-                        color: Colors.black, fontSize: 20, fontFamily: 'Kanit'),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                    margin: const EdgeInsets.only(left: 20, top: 10),
-                    width: MediaQuery.of(context).size.width - 40,
-                    height: 300,
-                    child: Center(
-                        child: Container(
-                            padding: const EdgeInsets.only(left: 10),
-                            transformAlignment: Alignment.topCenter,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: Colors.white,
-                                border: Border.all(
-                                    color: Color.fromARGB(255, 216, 216, 216),
-                                    style: BorderStyle.solid)),
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: PickerIcon(
-                              parentAction: (value) {
-                                widget.oCard?.iconID = value;
-                                print('==> ${value}');
-                              },
-                            )))),
-              ],
-            ),
-          ],
-        )));
+          ),
+          onTap: () {
+            //-- dismiss keyboard
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+        ));
   }
 
   Future<void> _asyncWarningDialog(BuildContext context) async {

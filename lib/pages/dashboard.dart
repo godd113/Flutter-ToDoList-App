@@ -62,7 +62,8 @@ class _DashboardState extends State<Dashboard> {
         for (var element in listToDoCard) {
           ModuleCenter.listCards.add(CardToDo(
             oModelCard: element,
-            parentAction: _cardAction,
+            parentActionDelete: _cardActionDelete,
+            parentActionEdit: _editCardInList,
           ));
           i += 1;
         }
@@ -72,7 +73,7 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  Future<void> _cardAction(CardToDo oCard) async {
+  Future<void> _cardActionDelete(CardToDo oCard) async {
     int index = ModuleCenter.listCards.indexWhere((element) =>
         element.oModelCard.todoCardID == oCard.oModelCard.todoCardID);
     _db.delete(oCard.oModelCard.todoCardID);
@@ -89,11 +90,21 @@ class _DashboardState extends State<Dashboard> {
   Future<void> addNewList(ModelToDoCard oModelCard) async {
     ModuleCenter.listCards.add(CardToDo(
       oModelCard: oModelCard,
-      parentAction: _cardAction,
+      parentActionDelete: _cardActionDelete,
+      parentActionEdit: _editCardInList,
     ));
     ModuleCenter.listCards.sort(
         (a, b) => b.oModelCard.todoCardID.compareTo(a.oModelCard.todoCardID));
     _db.create(oModelCard);
+  }
+
+  Future<void> _editCardInList(CardToDo oCard) async {
+    int index = ModuleCenter.listCards.indexWhere((element) =>
+        element.oModelCard.todoCardID == oCard.oModelCard.todoCardID);
+    _db.update(oCard.oModelCard);
+    setState(() {
+      ModuleCenter.listCards[index] = oCard;
+    });
   }
 
   @override
@@ -140,18 +151,26 @@ class _DashboardState extends State<Dashboard> {
                           size: widget.addBtnSize,
                         ),
                         onTap: () {
-                          /*setState(() {
-                        widget.listCard.add(CardToDo());
-                      });*/
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CardManager(
-                                      parentAction: (ModelToDoCard oModelCard) {
+                                      isEdit: false,
+                                      oCard: ModelToDoCard(
+                                          todoCardID: 0,
+                                          todoCardName: "",
+                                          todoCardTaskNum: "0",
+                                          iconID: 0,
+                                          color: Colors.transparent,
+                                          listToDo: []),
+                                      parentActionAdd:
+                                          (ModelToDoCard oModelCard) {
                                         setState(() {
                                           addNewList(oModelCard);
                                         });
                                       },
+                                      parentActionEdit:
+                                          (ModelToDoCard oModelCard) {},
                                     )),
                           );
                           print('click add');

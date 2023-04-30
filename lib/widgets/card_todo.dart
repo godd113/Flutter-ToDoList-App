@@ -4,14 +4,20 @@ import 'package:todo/models/modelIcon.dart';
 import 'package:todo/models/modelToDoCard.dart';
 import 'package:todo/modules/module_center.dart';
 import 'package:todo/modules/module_colors.dart';
+import 'package:todo/pages/card_manager.dart';
 import 'package:todo/pages/todo_list.dart';
 import 'package:todo/widgets/cupertino_actionsheet.dart';
 
 class CardToDo extends StatefulWidget {
   ModelToDoCard oModelCard;
   final List<ModelIcon> allIcons = ModuleCenter.listIcons;
-  final ValueChanged<CardToDo> parentAction;
-  CardToDo({super.key, required this.oModelCard, required this.parentAction});
+  final ValueChanged<CardToDo> parentActionDelete;
+  final ValueChanged<CardToDo> parentActionEdit;
+  CardToDo(
+      {super.key,
+      required this.oModelCard,
+      required this.parentActionDelete,
+      required this.parentActionEdit});
 
   @override
   State<CardToDo> createState() => _CardToDoState();
@@ -41,10 +47,29 @@ class _CardToDoState extends State<CardToDo> {
     );
   }
 
-  Future<void> _editDetailCard(int value) async {}
+  Future<void> _editDetailCard(int value) async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CardManager(
+                  isEdit: true,
+                  oCard: widget.oModelCard,
+                  parentActionAdd: (ModelToDoCard oModelCard) {
+                    setState(() {
+                      widget.oModelCard = oModelCard;
+                    });
+                  },
+                  parentActionEdit: (ModelToDoCard oModelCard) {
+                    setState(() {
+                      widget.oModelCard = oModelCard;
+                      widget.parentActionEdit(ModuleCenter.listCards[index]);
+                    });
+                  },
+                )));
+  }
 
   Future<void> _deleteDetailCard(int value) async {
-    widget.parentAction(ModuleCenter.listCards[index]);
+    widget.parentActionDelete(ModuleCenter.listCards[index]);
   }
 
   @override

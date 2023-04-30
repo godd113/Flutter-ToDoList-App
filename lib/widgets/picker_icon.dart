@@ -5,7 +5,9 @@ import '../models/modelIcon.dart';
 
 class PickerIcon extends StatefulWidget {
   final ValueChanged<int> parentAction;
-  PickerIcon({super.key, required this.parentAction});
+  int selectedIconKey;
+  PickerIcon(
+      {super.key, required this.parentAction, required this.selectedIconKey});
 
   // selected icon
   // the selected icon is highlighed
@@ -32,12 +34,12 @@ class _PickerIconState extends State<PickerIcon> {
               mainAxisSpacing: 10),
           itemCount: allIcons.length,
           itemBuilder: (_, index) => Container(
-                key: ValueKey(allIcons[index].icon.codePoint),
+                key: ValueKey(allIcons[index].iconID),
                 padding: const EdgeInsets.all(10),
                 child: Center(
                   child: IconButton(
                     // give the selected icon a different color
-                    color: widget.selectedIcon == allIcons[index].icon
+                    color: widget.selectedIconKey == allIcons[index].iconID
                         ? ModuleColors.themeColor
                         : Colors.grey,
                     iconSize: 30,
@@ -47,6 +49,7 @@ class _PickerIconState extends State<PickerIcon> {
                     onPressed: () {
                       setState(() {
                         widget.selectedIcon = allIcons[index].icon;
+                        widget.selectedIconKey = allIcons[index].iconID;
                       });
                       int iconID = allIcons[index].iconID;
                       widget.parentAction(iconID);

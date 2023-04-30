@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo/models/modelColor.dart';
 
 class TColorPicker extends StatefulWidget {
-  String selectionColor = "";
+  Color selectionColor;
   final ValueChanged<ModelColor> parentActions;
   TColorPicker(
       {super.key, required this.selectionColor, required this.parentActions});
@@ -57,7 +57,12 @@ class _TColorPickerState extends State<TColorPicker> {
                       ),
                       width: 30,
                       height: 30,
-                      child: widget.selectionColor == listColor[index].keyColor
+                      child: widget.selectionColor ==
+                              Color.fromRGBO(
+                                  listColor[index].r,
+                                  listColor[index].g,
+                                  listColor[index].b,
+                                  listColor[index].alpha)
                           ? const Icon(
                               Icons.check,
                               color: Colors.white,
@@ -65,7 +70,7 @@ class _TColorPickerState extends State<TColorPicker> {
                           : Container()),
                   onTap: () {
                     setState(() {
-                      widget.selectionColor = listColor[index].keyColor;
+                      widget.selectionColor = listColor[index] as Color;
                     });
                     ModelColor color = listColor[index];
                     widget.parentActions(color);

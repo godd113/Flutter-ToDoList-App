@@ -43,8 +43,8 @@ class _CardManagerState extends State<CardManager> {
 
   @override
   Widget build(BuildContext context) {
-    _textFieldController = TextEditingController(
-        text: !widget.isEdit ? "" : widget.oCard.todoCardName.toString());
+    _textFieldController =
+        TextEditingController(text: widget.oCard.todoCardName.toString());
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.isEdit ? 'Edit' : 'Add New'),
@@ -168,7 +168,7 @@ class _CardManagerState extends State<CardManager> {
                                           value.b,
                                           value.alpha);
                                     },
-                                    selectionColor: '')))),
+                                    selectionColor: widget.oCard.color)))),
                   ],
                 ),
                 Row(
@@ -205,8 +205,9 @@ class _CardManagerState extends State<CardManager> {
                                         style: BorderStyle.solid)),
                                 width: MediaQuery.of(context).size.width - 40,
                                 child: PickerIcon(
+                                  selectedIconKey: widget.oCard.iconID,
                                   parentAction: (value) {
-                                    widget.oCard?.iconID = value;
+                                    widget.oCard.iconID = value;
                                     print('==> ${value}');
                                   },
                                 )))),
@@ -217,6 +218,7 @@ class _CardManagerState extends State<CardManager> {
           ),
           onTap: () {
             //-- dismiss keyboard
+            widget.oCard.todoCardName = _textFieldController!.text.toString();
             FocusScopeNode currentFocus = FocusScope.of(context);
             if (!currentFocus.hasPrimaryFocus) {
               currentFocus.unfocus();

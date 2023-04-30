@@ -70,7 +70,11 @@ class _TColorPickerState extends State<TColorPicker> {
                           : Container()),
                   onTap: () {
                     setState(() {
-                      widget.selectionColor = listColor[index] as Color;
+                      widget.selectionColor = Color.fromRGBO(
+                          listColor[index].r,
+                          listColor[index].g,
+                          listColor[index].b,
+                          listColor[index].alpha);
                     });
                     ModelColor color = listColor[index];
                     widget.parentActions(color);

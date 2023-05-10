@@ -31,7 +31,7 @@ class ModuleCenter {
     ModelIcon(iconID: 19, icon: AppIcons.directions_bike),
     ModelIcon(iconID: 20, icon: AppIcons.directions_boat),
     ModelIcon(iconID: 21, icon: AppIcons.ac_unit),
-    ModelIcon(iconID: 22, icon: AppIcons.pets),
+    ModelIcon(iconID: 26, icon: AppIcons.pets),
     ModelIcon(iconID: 23, icon: AppIcons.event_seat),
     ModelIcon(iconID: 24, icon: AppIcons.extension),
     ModelIcon(iconID: 25, icon: AppIcons.free_breakfast),
